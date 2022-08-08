@@ -9,6 +9,12 @@
 #include <iostream>
 #include "glsl.h"
 #include <time.h>
+#include "Classes/tree.h"
+#include "Classes/Square.h"
+#include "Classes/Table.h"
+#include "Classes/Circle.h"
+
+
 
 //-----------------------------------------------------------------------------
 
@@ -22,75 +28,43 @@ protected:
    clock_t time0,time1;
    float timer010;  // timer counting 0->1->0
    bool bUp;        // flag if counting up or down.
+   Tree Mango;
+   Square Cuadrado;
+   Table Mesa;
+   Circle Circulo;
 
 
 public:
 	myWindow(){}
 
-	virtual void OnRender(void)
-	{
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	
-      //timer010 = 0.09; //for screenshot!
-      glPushMatrix();
+    virtual void OnRender(void)
+    {
+        Mango = Tree();
+        Cuadrado = Square();
+        Mesa = Table();
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-      if (shader) shader->begin();
-         glPushMatrix();
-         glTranslatef(0.0, 0.0, -7.0);
+        //timer010 = 0.09; //for screenshot!
+        glPushMatrix();
+        if (shader) shader->begin();
+        glPushMatrix();
 
+        glTranslatef(0.0, 0.0, -7.0); //Quitar zoom
 
-            glPushMatrix();
-                glutSolidTeapot(0.5);
-            glPopMatrix();
-            glPushMatrix();
-                glTranslatef(0, 2.0, 2.0);
-                glBegin(GL_TRIANGLES);
-                    glVertex3f(0.4, 0, 0);
-                    glVertex3f(0,0.4, 0);
-                    glVertex3f(-0.4, 0, 0);
-                glEnd();
-                //glutSolidTeapot(0.5);
-            glPopMatrix();
-            glPushMatrix();
-                glRotatef(45, 0, 0, 1);
-                glTranslatef(3, 0.0, 0.0);
-                //glRotatef(45, 0, 0, 1);
-                glutSolidCube(0.5);
-            glPopMatrix();
-            glPushMatrix();
-                glRotatef(135, 0, 0, 1);
-                glTranslatef(3, 0.0, 0.0);
-                //glRotatef(45, 0, 0, 1);
-                glutSolidCube(0.5);
-            glPopMatrix();
-
-            glPushMatrix();
-                glTranslatef(-3, 0.0, 0.0);
-                glutSolidTeapot(0.5);
-            glPopMatrix();
-
-            glPushMatrix();
-                glTranslatef(3, 0.0, 0.0);
-                glutSolidTeapot(0.5);
-            glPopMatrix();
-
-
-            glPushMatrix();
-                glTranslatef(0.0, -3.0, 0.0);
-                glutSolidTeapot(0.5);
-            glPopMatrix();
+        Mango.DrawTree(-3.0, 0.0, 0.0);
+        Cuadrado.Draw(0.0, 3.0, 0.0, 1, 45);
+        Mesa.Draw(3.0, 0.0, 0.0);
+        Circulo.Draw(0.0, 0.0, 0.0, 0.5);
 
         glPopMatrix();
-      if (shader) shader->end();
+        if (shader) shader->end();
+        glutSwapBuffers();
+        glPopMatrix();
 
+        UpdateTimer();
 
-      glutSwapBuffers();
-      glPopMatrix();
-
-      UpdateTimer();
-
-		Repaint();
-	}
+        Repaint();
+    }
 
 	virtual void OnIdle() {}
 
